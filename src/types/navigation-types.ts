@@ -6,9 +6,11 @@ import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 export type RootStackParamList = {
     Splash: undefined;
     Login: undefined;
+    Register: undefined;
     MainTabs: undefined;
     CampaignDetails: { id: string };
     Donation: { campaignId: string };
+    Campaigns: undefined;
     // Profile-related screens
     Account: undefined;
     HelpCenter: undefined;
@@ -19,14 +21,8 @@ export type RootStackParamList = {
 // Define the parameter list for the tab navigation
 export type TabParamList = {
     Home: undefined;
-    Notifications: undefined;
+    Campaigns: undefined;
     Profile: undefined;
-};
-
-// Define the props for the stack navigation
-export type StackNavigationProps<T extends keyof RootStackParamList> = {
-    navigation: StackNavigationProp<RootStackParamList, T>;
-    route: RouteProp<RootStackParamList, T>;
 };
 
 // Define the props for the tab navigation

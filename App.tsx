@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useFonts from './src/hooks/useFonts';
 import SplashScreen from './src/screens/SplashScreen';
 import AppNavigator from './src/navigation';
+import { AuthProvider } from './src/context/AuthContext';
 
 export default function App() {
     const [isLoading, setIsLoading] = useState(true);
@@ -19,12 +20,14 @@ export default function App() {
     }, []);
 
     if (!fontsLoaded) {
-        return <View />; // Return an empty view while fonts are loading
+        return <View />;
     }
 
     return (
         <SafeAreaProvider>
-            {isLoading ? <SplashScreen /> : <AppNavigator />}
+            <AuthProvider>
+                {isLoading ? <SplashScreen /> : <AppNavigator />}
+            </AuthProvider>
         </SafeAreaProvider>
     );
 }

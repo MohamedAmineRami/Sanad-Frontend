@@ -34,6 +34,7 @@ export const SIZES = {
     medium: 16,
     large: 18,
     extraLarge: 24,
+    xl:26,
     xxl: 32,
     xxxl: 48,
     h1: 30,

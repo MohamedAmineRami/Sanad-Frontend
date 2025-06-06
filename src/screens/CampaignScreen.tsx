@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -9,11 +9,13 @@ import {
     Image,
     TouchableOpacity,
     Dimensions,
+    ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, FONTS, SIZES, SHADOWS } from '../utils/constants';
 import { NavigationProps } from '../types/navigation-types';
-import { campaignsData } from '../utils/campaignsData';
+import { Campaign, BackendCampaign, transformCampaign } from '../types/campaign';
+import ApiService from '../services/api';
 
 const { width } = Dimensions.get('window');
 
@@ -21,23 +23,32 @@ interface CampaignScreenProps extends NavigationProps<'CampaignDetails'> {}
 
 const CampaignScreen = ({ navigation, route }: CampaignScreenProps) => {
     const { id } = route.params;
+    const [campaign, setCampaign] = useState<Campaign | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    // Find the campaign data by id
-    const campaign = campaignsData.find(c => c.id === id);
+    useEffect(() => {
+        fetchCampaignData();
+    }, [id]);
 
-    if (!campaign) {
-        return (
-            <SafeAreaView style={styles.container}>
-                <View style={styles.errorContainer}>
-                    <Text style={styles.errorText}>Campaign not found</Text>
-                </View>
-            </SafeAreaView>
-        );
-    }
+    const fetchCampaignData = async () => {
+        try {
+            setLoading(true);
+            setError(null);
 
-    // Calculate goal and raised amounts (example calculations)
-    const goal = campaign.goal;
-    const raised = campaign.raised;
+            // Convert string id to number for API call
+            const numericId = parseInt(id.toString(), 10);
+            const backendCampaign: BackendCampaign = await ApiService.getCampaignById(numericId);
+            const transformedCampaign = transformCampaign(backendCampaign);
+
+            setCampaign(transformedCampaign);
+        } catch (err) {
+            console.error('Error fetching campaign:', err);
+            setError('Failed to load campaign details');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // Get progress bar color based on campaign category
     const getProgressColor = (category: string) => {
@@ -59,8 +70,35 @@ const CampaignScreen = ({ navigation, route }: CampaignScreenProps) => {
     };
 
     const handleDonate = () => {
-        navigation.navigate('Donation', { campaignId: campaign.id });
+        if (campaign) {
+            navigation.navigate('Donation', { campaignId: campaign.id });
+        }
     };
+
+    if (loading) {
+        return (
+            <SafeAreaView style={styles.container}>
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color={COLORS.primary} />
+                    <Text style={styles.loadingText}>Loading campaign...</Text>
+                </View>
+            </SafeAreaView>
+        );
+    }
+
+    if (error || !campaign) {
+        return (
+            <SafeAreaView style={styles.container}>
+                <View style={styles.errorContainer}>
+                    <Ionicons name="alert-circle-outline" size={50} color={COLORS.grey} />
+                    <Text style={styles.errorText}>{error || 'Campaign not found'}</Text>
+                    <TouchableOpacity style={styles.retryButton} onPress={fetchCampaignData}>
+                        <Text style={styles.retryButtonText}>Retry</Text>
+                    </TouchableOpacity>
+                </View>
+            </SafeAreaView>
+        );
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -103,7 +141,7 @@ const CampaignScreen = ({ navigation, route }: CampaignScreenProps) => {
                             </View>
                         </View>
                         <View style={styles.verifiedBadge}>
-                            <Ionicons name="checkmark-circle" size={16}  />
+                            <Ionicons name="checkmark-circle" size={16} color={COLORS.primary} />
                             <Text style={styles.verifiedText}>Verificado</Text>
                         </View>
                     </View>
@@ -137,11 +175,11 @@ const CampaignScreen = ({ navigation, route }: CampaignScreenProps) => {
                         <View style={styles.amountContainer}>
                             <View style={styles.amountItem}>
                                 <Text style={styles.amountLabel}>Objetivo</Text>
-                                <Text style={styles.amountValue}>€{goal.toLocaleString()}</Text>
+                                <Text style={styles.amountValue}>€{campaign.goal.toLocaleString()}</Text>
                             </View>
                             <View style={styles.amountItem}>
                                 <Text style={styles.amountLabel}>Recaudado</Text>
-                                <Text style={styles.amountValue}>€{raised.toLocaleString()}</Text>
+                                <Text style={styles.amountValue}>€{campaign.raised.toLocaleString()}</Text>
                             </View>
                         </View>
                     </View>
@@ -178,15 +216,41 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: COLORS.background,
     },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loadingText: {
+        fontSize: SIZES.body1,
+        fontFamily: FONTS.regular,
+        color: COLORS.grey,
+        marginTop: 16,
+    },
     errorContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        paddingHorizontal: 24,
     },
     errorText: {
         fontSize: SIZES.h3,
         fontFamily: FONTS.medium,
         color: COLORS.grey,
+        textAlign: 'center',
+        marginTop: 16,
+        marginBottom: 24,
+    },
+    retryButton: {
+        backgroundColor: COLORS.primary,
+        paddingHorizontal: 24,
+        paddingVertical: 12,
+        borderRadius: 8,
+    },
+    retryButtonText: {
+        fontSize: SIZES.body1,
+        fontFamily: FONTS.medium,
+        color: COLORS.white,
     },
     scrollView: {
         flex: 1,
@@ -282,6 +346,7 @@ const styles = StyleSheet.create({
         fontSize: SIZES.small,
         fontFamily: FONTS.medium,
         marginLeft: 4,
+        color: COLORS.primary,
     },
     participantsContainer: {
         flexDirection: 'row',

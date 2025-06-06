@@ -12,8 +12,11 @@ import {
 } from 'react-native';
 import { COLORS, FONTS, SIZES, SHADOWS } from '../../utils/constants';
 import { NavigationProps } from '../../types/navigation-types';
+import { useAuth } from '../../context/AuthContext';
 
 const AccountScreen = ({ navigation }: NavigationProps<'Account'>) => {
+    const { logout, user } = useAuth(); // Get logout function and user data
+
     const handleSignOut = () => {
         Alert.alert(
             'Cerrar Sesión',
@@ -25,30 +28,24 @@ const AccountScreen = ({ navigation }: NavigationProps<'Account'>) => {
                 },
                 {
                     text: 'Cerrar Sesión',
-                    onPress: () => {
-                        // Here you would implement your Firebase sign out logic
-                        console.log('Signing out...');
-                        // navigation.navigate('Auth');
+                    onPress: async () => {
+                        try {
+                            console.log('Signing out...');
+                            await logout();
+                            // Navigation will be handled automatically by your app's auth state management
+                            // The user will be redirected to the auth screen when isAuthenticated becomes false
+                        } catch (error) {
+                            console.error('Logout error:', error);
+                            Alert.alert(
+                                'Error',
+                                'Hubo un problema al cerrar sesión. Inténtalo de nuevo.'
+                            );
+                        }
                     },
                     style: 'destructive',
                 },
             ],
         );
-    };
-
-    const handleEditProfile = () => {
-        // Navigate to edit profile screen
-        console.log('Edit profile pressed');
-    };
-
-    const handleChangePassword = () => {
-        // Navigate to change password screen
-        console.log('Change password pressed');
-    };
-
-    const handleNotificationSettings = () => {
-        // Navigate to notification settings
-        console.log('Notification settings pressed');
     };
 
     const AccountOption = ({ icon, title, subtitle, onPress, isDestructive = false }: {
@@ -111,8 +108,12 @@ const AccountScreen = ({ navigation }: NavigationProps<'Account'>) => {
                             resizeMode="cover"
                         />
                     </View>
-                    <Text style={styles.userName}>Mohamed Amine</Text>
-                    <Text style={styles.userEmail}>mohamed.amine@example.com</Text>
+                    <Text style={styles.userName}>
+                        {user?.name || 'Mohamed Amine'}
+                    </Text>
+                    <Text style={styles.userEmail}>
+                        {user?.email || 'mohamed.amine@example.com'}
+                    </Text>
                 </View>
 
                 {/* Account Options */}
