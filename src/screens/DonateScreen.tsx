@@ -6,10 +6,12 @@ import {
     SafeAreaView,
     StatusBar,
     Alert,
+    ActivityIndicator,
 } from 'react-native';
 import { COLORS, FONTS, SIZES } from '../utils/constants';
 import { NavigationProps } from '../types/navigation-types';
-import { campaignsData } from '../utils/campaignsData';
+import { Campaign, BackendCampaign, transformCampaign } from '../types/campaign';
+import ApiService from '../services/api';
 
 // Import modular components
 import { DonateHeader } from '../components/donate/DonateHeader';
@@ -24,6 +26,9 @@ interface DonateScreenProps extends NavigationProps<'Donation'> {}
 
 const DonateScreen = ({ navigation, route }: DonateScreenProps) => {
     const { campaignId } = route.params;
+    const [campaign, setCampaign] = useState<Campaign | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [donationAmount, setDonationAmount] = useState(250);
     const [customAmount, setCustomAmount] = useState('');
     const [isCustomInput, setIsCustomInput] = useState(false);
@@ -34,8 +39,29 @@ const DonateScreen = ({ navigation, route }: DonateScreenProps) => {
     const MIN_AMOUNT = 10;
     const DEFAULT_AMOUNT = 250;
 
-    // Find the campaign data by id
-    const campaign = campaignsData.find(c => c.id === campaignId);
+    // Fetch campaign data
+    useEffect(() => {
+        fetchCampaignData();
+    }, [campaignId]);
+
+    const fetchCampaignData = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            // Convert string id to number for API call
+            const numericId = parseInt(campaignId.toString(), 10);
+            const backendCampaign: BackendCampaign = await ApiService.getCampaignById(numericId);
+            const transformedCampaign = transformCampaign(backendCampaign);
+
+            setCampaign(transformedCampaign);
+        } catch (err) {
+            console.error('Error fetching campaign:', err);
+            setError('Failed to load campaign details');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // Get background color based on campaign category
     const getBackgroundColor = (category: string) => {
@@ -144,12 +170,24 @@ const DonateScreen = ({ navigation, route }: DonateScreenProps) => {
         );
     };
 
+    // Loading state
+    if (loading) {
+        return (
+            <SafeAreaView style={[styles.container, { backgroundColor: COLORS.brownRose }]}>
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color={COLORS.white} />
+                    <Text style={styles.loadingText}>Cargando campaña...</Text>
+                </View>
+            </SafeAreaView>
+        );
+    }
+
     // Error state
-    if (!campaign) {
+    if (error || !campaign) {
         return (
             <SafeAreaView style={[styles.container, { backgroundColor: COLORS.brownRose }]}>
                 <View style={styles.errorContainer}>
-                    <Text style={styles.errorText}>Campaña no encontrada</Text>
+                    <Text style={styles.errorText}>{error || 'Campaña no encontrada'}</Text>
                 </View>
             </SafeAreaView>
         );
@@ -210,15 +248,28 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    errorContainer: {
+    loadingContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
+    loadingText: {
+        fontSize: SIZES.body1,
+        fontFamily: FONTS.regular,
+        color: COLORS.white,
+        marginTop: 16,
+    },
+    errorContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 24,
+    },
     errorText: {
         fontSize: SIZES.h3,
         fontFamily: FONTS.medium,
-        color: COLORS.black,
+        color: COLORS.white,
+        textAlign: 'center',
     },
     content: {
         flex: 1,
