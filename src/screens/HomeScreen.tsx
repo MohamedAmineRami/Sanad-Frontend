@@ -8,6 +8,7 @@ import CampaignCardHome from '../components/home/CampaignCardHome';
 import { TabNavigationProps } from '../types/navigation-types';
 import { Campaign, BackendCampaign, transformCampaign } from '../types/campaign';
 import ApiService from '../services/api';
+import { useAuth } from '../context/AuthContext'; // Import useAuth hook
 
 // Dummy data (can be moved or replaced later as well)
 const recentActivities = [
@@ -30,7 +31,7 @@ const categories = [
         id: '1',
         name: 'Comida',
         icon: 'food' as const,
-        categoryKey: 'food', // Maps to backend category
+        categoryKey: 'food',
     },
     {
         id: '2',
@@ -53,6 +54,7 @@ const categories = [
 ];
 
 const HomeScreen = ({ navigation }: TabNavigationProps<'Home'>) => {
+    const { user } = useAuth(); // Get the authenticated user
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
     const [featuredCampaign, setFeaturedCampaign] = useState<Campaign | null>(null);
@@ -127,7 +129,7 @@ const HomeScreen = ({ navigation }: TabNavigationProps<'Home'>) => {
             <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
 
             <ScrollView showsVerticalScrollIndicator={false}>
-                <HomeHeader userName="Mohamed Amine" />
+                <HomeHeader userName={user?.name || 'Usuario'} />
 
                 <ActivitySection activities={recentActivities} />
 
@@ -140,7 +142,7 @@ const HomeScreen = ({ navigation }: TabNavigationProps<'Home'>) => {
                     loading={loading} // Pass loading state
                 />
 
-                {/* Show featured campaign only when no category is selected */}
+                {/* Show a featured campaign only when no category is selected */}
                 {!selectedCategory && featuredCampaign && (
                     <CampaignCardHome
                         id={featuredCampaign.id}

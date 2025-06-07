@@ -9,8 +9,11 @@ import { COLORS } from '../utils/constants';
 import { TabNavigationProps } from '../types/navigation-types';
 import ProfileHeader from '../components/profile/ProfileHeader';
 import ProfileActionsGrid from '../components/profile/ProfileActionsGrid';
+import { useAuth } from '../context/AuthContext'; // Import useAuth hook
 
 const ProfileScreen = ({ navigation }: TabNavigationProps<'Profile'>) => {
+    const { user } = useAuth(); // Get the authenticated user
+
     // Define profile actions data with navigation
     const profileActions = [
         {
@@ -56,7 +59,7 @@ const ProfileScreen = ({ navigation }: TabNavigationProps<'Profile'>) => {
             <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
 
             {/* Profile Header */}
-            <ProfileHeader name="Mohamed Amine" />
+            <ProfileHeader name={user?.name || 'Usuario'} />
 
             {/* Profile Actions Grid */}
             <ProfileActionsGrid actions={profileActions} />
