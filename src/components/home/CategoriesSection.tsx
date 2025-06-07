@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { COLORS, FONTS, SIZES, SHADOWS } from '../../utils/constants';
-import { campaignsData } from '../../utils/campaignsData';
 import CampaignCardHome from './CampaignCardHome';
+import { Campaign } from '../../types/campaign';
 
 interface Category {
     id: string;
     name: string;
     icon: 'food' | 'water' | 'education' | 'other';
+    categoryKey: string; // Added this to map to backend categories
 }
 
 interface CategoriesSectionProps {
@@ -15,6 +16,8 @@ interface CategoriesSectionProps {
     selectedCategory: string | null;
     onSelectCategory: (category: Category) => void;
     onCampaignPress: (campaignId: string) => void;
+    campaigns: Campaign[]; // Added campaigns prop
+    loading: boolean; // Added loading prop
 }
 
 const CategoriesSection: React.FC<CategoriesSectionProps> = ({
@@ -22,6 +25,8 @@ const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                                                                  selectedCategory,
                                                                  onSelectCategory,
                                                                  onCampaignPress,
+                                                                 campaigns, // New prop
+                                                                 loading, // New prop
                                                              }) => {
     // Get icon based on a category type
     const getCategoryIcon = (icon: string) => {
@@ -67,34 +72,13 @@ const CategoriesSection: React.FC<CategoriesSectionProps> = ({
         }
     };
 
-    // Map category names to filter values
-    const getCategoryFilterValue = (categoryName: string): string => {
-        switch (categoryName.toLowerCase()) {
-            case 'comida':
-                return 'food';
-            case 'agua':
-                return 'water';
-            case 'educacion':
-                return 'education';
-            case 'otros':
-                return 'other';
-            default:
-                return 'other';
-        }
-    };
-
-    // Filter campaigns based on a selected category
-    const getFilteredCampaigns = () => {
-        if (!selectedCategory) return [];
-
-        const selectedCategoryData = categories.find(cat => cat.id === selectedCategory);
-        if (!selectedCategoryData) return [];
-
-        const filterValue = getCategoryFilterValue(selectedCategoryData.name);
-        return campaignsData.filter(campaign => campaign.category === filterValue);
-    };
-
-    const filteredCampaigns = getFilteredCampaigns();
+    // Loading component
+    const LoadingComponent = () => (
+        <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={COLORS.primary} />
+            <Text style={styles.loadingText}>Cargando campañas...</Text>
+        </View>
+    );
 
     // No campaigns found component
     const NoCampaignsCard = () => (
@@ -109,7 +93,7 @@ const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                 </Text>
                 <TouchableOpacity
                     style={styles.noCampaignsButton}
-                    onPress={() => onSelectCategory({ id: '', name: '', icon: 'other' })} // Reset selection
+                    onPress={() => onSelectCategory({ id: '', name: '', icon: 'other', categoryKey: '' })} // Reset selection
                 >
                     <Text style={styles.noCampaignsButtonText}>Ver todas las categorías</Text>
                 </TouchableOpacity>
@@ -166,23 +150,25 @@ const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                             Campañas de {categories.find(cat => cat.id === selectedCategory)?.name}
                         </Text>
                         <TouchableOpacity
-                            onPress={() => onSelectCategory({ id: '', name: '', icon: 'other' })}
+                            onPress={() => onSelectCategory({ id: '', name: '', icon: 'other', categoryKey: '' })}
                             style={styles.clearFilterButton}
                         >
                             <Text style={styles.clearFilterText}>Limpiar filtro</Text>
                         </TouchableOpacity>
                     </View>
 
-                    {filteredCampaigns.length > 0 ? (
+                    {loading ? (
+                        <LoadingComponent />
+                    ) : campaigns.length > 0 ? (
                         <View>
-                            {filteredCampaigns.map((item) => (
+                            {campaigns.map((campaign) => (
                                 <CampaignCardHome
-                                    key={item.id}
-                                    id={item.id}
-                                    title={item.title}
-                                    image={item.image}
-                                    participants={item.participants}
-                                    onPress={() => onCampaignPress(item.id)}
+                                    key={campaign.id}
+                                    id={campaign.id}
+                                    title={campaign.title}
+                                    image={campaign.imageUrl ? { uri: campaign.imageUrl } : campaign.image}
+                                    participants={campaign.participants}
+                                    onPress={() => onCampaignPress(campaign.id)}
                                 />
                             ))}
                         </View>
@@ -274,6 +260,16 @@ const styles = StyleSheet.create({
         fontFamily: FONTS.regular,
         fontSize: SIZES.small,
         color: COLORS.primary,
+    },
+    loadingContainer: {
+        alignItems: 'center',
+        paddingVertical: SIZES.extraLarge,
+    },
+    loadingText: {
+        fontFamily: FONTS.regular,
+        fontSize: SIZES.small,
+        color: COLORS.grey,
+        marginTop: SIZES.small,
     },
     noCampaignsContainer: {
         marginTop: SIZES.medium,

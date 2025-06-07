@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, ScrollView, StyleSheet, StatusBar } from 'react-native';
 import { COLORS, SIZES } from '../utils/constants';
 import HomeHeader from '../components/home/HomeHeader';
@@ -6,7 +6,8 @@ import ActivitySection from '../components/home/ActivitySection';
 import CategoriesSection from '../components/home/CategoriesSection';
 import CampaignCardHome from '../components/home/CampaignCardHome';
 import { TabNavigationProps } from '../types/navigation-types';
-import { campaignsData } from '../utils/campaignsData';
+import { Campaign, BackendCampaign, transformCampaign } from '../types/campaign';
+import ApiService from '../services/api';
 
 // Dummy data (can be moved or replaced later as well)
 const recentActivities = [
@@ -29,34 +30,88 @@ const categories = [
         id: '1',
         name: 'Comida',
         icon: 'food' as const,
+        categoryKey: 'food', // Maps to backend category
     },
     {
         id: '2',
         name: 'Agua',
         icon: 'water' as const,
+        categoryKey: 'water',
     },
     {
         id: '3',
         name: 'Educacion',
         icon: 'education' as const,
+        categoryKey: 'education',
     },
     {
         id: '4',
         name: 'Otros',
         icon: 'other' as const,
+        categoryKey: 'other',
     },
 ];
 
-// Use the first campaign from campaignsData as the featured campaign
-const featuredCampaignFromData = campaignsData.length > 0 ? campaignsData[0] : null;
-
 const HomeScreen = ({ navigation }: TabNavigationProps<'Home'>) => {
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+    const [featuredCampaign, setFeaturedCampaign] = useState<Campaign | null>(null);
+    const [loading, setLoading] = useState(false);
+
+    // Load all campaigns on component mount (for featured campaign)
+    useEffect(() => {
+        loadAllCampaigns();
+    }, []);
+
+    // Load campaigns when category changes
+    useEffect(() => {
+        if (selectedCategory) {
+            loadCampaignsByCategory();
+        }
+    }, [selectedCategory]);
+
+    const loadAllCampaigns = async () => {
+        try {
+            setLoading(true);
+            const backendCampaigns: BackendCampaign[] = await ApiService.getCampaigns();
+            const transformedCampaigns = backendCampaigns.map(transformCampaign);
+
+            // Set the first campaign as featured
+            if (transformedCampaigns.length > 0) {
+                setFeaturedCampaign(transformedCampaigns[0]);
+            }
+        } catch (error) {
+            console.error('Error loading campaigns:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const loadCampaignsByCategory = async () => {
+        if (!selectedCategory) return;
+
+        try {
+            setLoading(true);
+            // Find the category key from the selected category
+            const selectedCategoryData = categories.find(cat => cat.id === selectedCategory);
+            if (!selectedCategoryData) return;
+
+            const backendCampaigns: BackendCampaign[] = await ApiService.getCampaignsByCategory(selectedCategoryData.categoryKey);
+            const transformedCampaigns = backendCampaigns.map(transformCampaign);
+            setCampaigns(transformedCampaigns);
+        } catch (error) {
+            console.error('Error loading campaigns by category:', error);
+            setCampaigns([]); // Clear campaigns on error
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleCategorySelect = (category: any) => {
         // Toggle category selection
         if (selectedCategory === category.id) {
             setSelectedCategory(null); // Deselect if already selected
+            setCampaigns([]); // Clear campaigns when deselecting
         } else {
             setSelectedCategory(category.id); // Select new category
         }
@@ -81,16 +136,18 @@ const HomeScreen = ({ navigation }: TabNavigationProps<'Home'>) => {
                     selectedCategory={selectedCategory}
                     onSelectCategory={handleCategorySelect}
                     onCampaignPress={handleCampaignPress}
+                    campaigns={campaigns} // Pass the fetched campaigns
+                    loading={loading} // Pass loading state
                 />
 
                 {/* Show featured campaign only when no category is selected */}
-                {!selectedCategory && featuredCampaignFromData && (
+                {!selectedCategory && featuredCampaign && (
                     <CampaignCardHome
-                        id={featuredCampaignFromData.id}
-                        title={featuredCampaignFromData.title}
-                        image={featuredCampaignFromData.image}
-                        participants={featuredCampaignFromData.participants}
-                        onPress={() => handleCampaignPress(featuredCampaignFromData.id)}
+                        id={featuredCampaign.id}
+                        title={featuredCampaign.title}
+                        image={featuredCampaign.image}
+                        participants={featuredCampaign.participants}
+                        onPress={() => handleCampaignPress(featuredCampaign.id)}
                     />
                 )}
 

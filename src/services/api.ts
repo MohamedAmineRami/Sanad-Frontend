@@ -103,6 +103,10 @@ class ApiService {
         return this.request<BackendCampaign>(`/campaigns/${id}`);
     }
 
+    // New method to get campaigns by category
+    async getCampaignsByCategory(category: string): Promise<BackendCampaign[]> {
+        return this.request<BackendCampaign[]>(`/campaigns?category=${category}`);
+    }
 }
 
 export default ApiService.getInstance();
