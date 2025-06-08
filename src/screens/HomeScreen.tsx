@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { SafeAreaView, View, ScrollView, StyleSheet, StatusBar } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { COLORS, SIZES } from '../utils/constants';
+import { COLORS } from '../utils/constants';
 import HomeHeader from '../components/home/HomeHeader';
 import ActivitySection from '../components/home/ActivitySection';
 import CategoriesSection from '../components/home/CategoriesSection';
@@ -128,7 +128,6 @@ const HomeScreen = ({ navigation }: TabNavigationProps<'Home'>) => {
     };
 
     const handleCampaignPress = (campaignId: string) => {
-        // Navigate to campaign details screen
         navigation.navigate('CampaignDetails', { id: campaignId });
     };
 

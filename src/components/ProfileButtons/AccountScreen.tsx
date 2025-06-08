@@ -15,7 +15,7 @@ import { NavigationProps } from '../../types/navigation-types';
 import { useAuth } from '../../context/AuthContext';
 
 const AccountScreen = ({ navigation }: NavigationProps<'Account'>) => {
-    const { logout, user } = useAuth(); // Get logout function and user data
+    const { logout, user } = useAuth();
 
     const handleSignOut = () => {
         Alert.alert(
@@ -32,8 +32,6 @@ const AccountScreen = ({ navigation }: NavigationProps<'Account'>) => {
                         try {
                             console.log('Signing out...');
                             await logout();
-                            // Navigation will be handled automatically by your app's auth state management
-                            // The user will be redirected to the auth screen when isAuthenticated becomes false
                         } catch (error) {
                             console.error('Logout error:', error);
                             Alert.alert(

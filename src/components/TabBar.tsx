@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { COLORS, SHADOWS } from '../utils/constants';
-import { HomeIcon, NotificationsIcon, ProfileIcon } from '../icons';
+import { HomeIcon, CampaignsIcon, ProfileIcon } from '../icons';
 
 interface TabBarProps {
     state: any;
@@ -33,8 +33,8 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
                     case 'Home':
                         icon = <HomeIcon size={28} focused={isFocused} />;
                         break;
-                    case 'Notifications':
-                        icon = <NotificationsIcon size={28} focused={isFocused} />;
+                    case 'Campaigns':
+                        icon = <CampaignsIcon size={28} focused={isFocused} />;
                         break;
                     case 'Profile':
                         icon = <ProfileIcon size={28} focused={isFocused} />;

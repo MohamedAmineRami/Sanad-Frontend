@@ -8,7 +8,7 @@ interface Category {
     id: string;
     name: string;
     icon: 'food' | 'water' | 'education' | 'other';
-    categoryKey: string; // Added this to map to backend categories
+    categoryKey: string;
 }
 
 interface CategoriesSectionProps {
@@ -16,8 +16,8 @@ interface CategoriesSectionProps {
     selectedCategory: string | null;
     onSelectCategory: (category: Category) => void;
     onCampaignPress: (campaignId: string) => void;
-    campaigns: Campaign[]; // Added campaigns prop
-    loading: boolean; // Added loading prop
+    campaigns: Campaign[];
+    loading: boolean;
 }
 
 const CategoriesSection: React.FC<CategoriesSectionProps> = ({
@@ -25,10 +25,9 @@ const CategoriesSection: React.FC<CategoriesSectionProps> = ({
                                                                  selectedCategory,
                                                                  onSelectCategory,
                                                                  onCampaignPress,
-                                                                 campaigns, // New prop
-                                                                 loading, // New prop
+                                                                 campaigns,
+                                                                 loading,
                                                              }) => {
-    // Get icon based on a category type
     const getCategoryIcon = (icon: string) => {
         switch (icon) {
             case 'food':
@@ -43,7 +42,6 @@ const CategoriesSection: React.FC<CategoriesSectionProps> = ({
         }
     };
 
-    // Get color based on a category type
     const getCategoryColor = (icon: string): string => {
         switch (icon) {
             case 'food':
@@ -72,7 +70,6 @@ const CategoriesSection: React.FC<CategoriesSectionProps> = ({
         }
     };
 
-    // Loading component
     const LoadingComponent = () => (
         <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={COLORS.primary} />
@@ -80,7 +77,6 @@ const CategoriesSection: React.FC<CategoriesSectionProps> = ({
         </View>
     );
 
-    // No campaigns found component
     const NoCampaignsCard = () => (
         <View style={styles.noCampaignsContainer}>
             <View style={styles.noCampaignsCard}>

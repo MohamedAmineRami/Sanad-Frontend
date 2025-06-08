@@ -8,7 +8,6 @@ import {
 } from '@expo-google-fonts/poppins';
 import * as SplashScreen from 'expo-splash-screen';
 
-// Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 export default function useFonts() {
@@ -27,7 +26,6 @@ export default function useFonts() {
             } catch (e) {
                 console.warn(e);
             } finally {
-                // Hide splash screen once fonts are loaded
                 await SplashScreen.hideAsync();
             }
         }

@@ -10,7 +10,7 @@ import {
     TextInput,
     Alert,
     ActivityIndicator,
-    ImageBackground, // Add this import
+    ImageBackground,
 } from 'react-native';
 import { COLORS, FONTS, SIZES, SHADOWS } from '../utils/constants';
 import { NavigationProps } from '../types/navigation-types';
@@ -52,7 +52,7 @@ const LoginScreen = ({ navigation }: NavigationProps<'Login'>) => {
     if (showEmailLogin) {
         return (
             <ImageBackground
-                source={require('../assets/background-image.png')} // Replace it with your image path
+                source={require('../assets/background-image.png')}
                 style={styles.backgroundImage}
                 resizeMode="cover"
             >
@@ -135,7 +135,7 @@ const LoginScreen = ({ navigation }: NavigationProps<'Login'>) => {
 
     return (
         <ImageBackground
-            source={require('../assets/background-image.png')} // Replace with your image path
+            source={require('../assets/background-image.png')}
             style={styles.backgroundImage}
             resizeMode="cover"
         >
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     },
     containerWithBg: {
         flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.3)', // Optional: Add overlay for better text readability
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
     },
     header: {
         flexDirection: 'row',
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: 'rgba(255, 255, 255, 0.9)', // Semi-transparent for better visibility
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
         justifyContent: 'center',
         alignItems: 'center',
         ...SHADOWS.light,
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: SIZES.large,
         fontFamily: FONTS.semiBold,
-        color: COLORS.white, // Changed to white for better visibility on background
+        color: COLORS.white,
         marginRight: 40,
     },
     backgroundContainer: {
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         marginBottom: SIZES.medium,
-        tintColor: COLORS.white, // Changed for better visibility
+        tintColor: COLORS.white,
     },
     mainText: {
         fontFamily: FONTS.semiBold,
@@ -250,7 +250,6 @@ const styles = StyleSheet.create({
         marginBottom: SIZES.small,
         marginTop: SIZES.large,
     },
-    // New styles for text with background
     mainTextWithBg: {
         fontFamily: FONTS.semiBold,
         fontSize: SIZES.xxl,
@@ -328,7 +327,7 @@ const styles = StyleSheet.create({
         marginBottom: SIZES.medium,
     },
     input: {
-        backgroundColor: 'rgba(255, 255, 255, 0.95)', // Semi-transparent for better visibility
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
         borderRadius: 12,
         paddingHorizontal: SIZES.medium,
         paddingVertical: SIZES.medium + 2,

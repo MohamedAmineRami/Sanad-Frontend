@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
         fontSize: SIZES.large,
         fontFamily: FONTS.semiBold,
         color: COLORS.black,
-        marginRight: 40, // Compensate for back button
+        marginRight: 40,
     },
     logoContainer: {
         alignItems: 'center',

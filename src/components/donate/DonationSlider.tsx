@@ -28,8 +28,7 @@ export const DonationSlider = ({
                 onValueChange={onValueChange}
                 minimumTrackTintColor={COLORS.white}
                 maximumTrackTintColor={COLORS.sliderTrack}
-                thumbStyle={styles.sliderThumb}
-                trackStyle={styles.sliderTrack}
+                thumbTintColor={COLORS.sliderThumb}
                 disabled={disabled}
             />
             <View style={styles.sliderLabels}>
@@ -48,15 +47,6 @@ const styles = StyleSheet.create({
     slider: {
         width: '100%',
         height: 40,
-    },
-    sliderThumb: {
-        backgroundColor: COLORS.sliderThumb,
-        width: 24,
-        height: 24,
-    },
-    sliderTrack: {
-        height: 4,
-        borderRadius: 2,
     },
     sliderLabels: {
         flexDirection: 'row',

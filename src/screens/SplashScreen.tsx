@@ -12,7 +12,6 @@ import { COLORS, FONTS, SIZES } from '../utils/constants';
 const { width } = Dimensions.get('window');
 
 const SplashScreen = () => {
-    // Animation values
     const birdOpacity = useSharedValue(0);
     const textTranslateX = useSharedValue(width);
 
@@ -30,7 +29,6 @@ const SplashScreen = () => {
         }));
     }, []);
 
-    // Animated styles
     const birdAnimatedStyle = useAnimatedStyle(() => {
         return {
             opacity: birdOpacity.value,

@@ -11,6 +11,7 @@ import {
     Linking,
     Alert,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS, FONTS, SIZES, SHADOWS } from '../../utils/constants';
 import { NavigationProps } from '../../types/navigation-types';
 
@@ -46,14 +47,16 @@ const HelpCenterScreen = ({ navigation }: NavigationProps<'HelpCenter'>) => {
     };
 
     const ContactCard = ({
-                             icon,
+                             iconName,
+                             iconType = 'ionicon',
                              title,
                              subtitle,
                              contact,
                              onPress,
                              type = 'phone'
                          }: {
-        icon: any;
+        iconName: string;
+        iconType?: 'ionicon' | 'image';
         title: string;
         subtitle: string;
         contact: string;
@@ -62,11 +65,19 @@ const HelpCenterScreen = ({ navigation }: NavigationProps<'HelpCenter'>) => {
     }) => (
         <TouchableOpacity style={styles.contactCard} onPress={onPress}>
             <View style={styles.contactIconContainer}>
-                <Image
-                    source={icon}
-                    style={styles.contactIcon}
-                    resizeMode="contain"
-                />
+                {iconType === 'ionicon' ? (
+                    <Ionicons
+                        name={iconName as any}
+                        size={24}
+                        color={COLORS.primary}
+                    />
+                ) : (
+                    <Image
+                        source={{ uri: iconName }}
+                        style={styles.contactIcon}
+                        resizeMode="contain"
+                    />
+                )}
             </View>
             <View style={styles.contactInfo}>
                 <Text style={styles.contactTitle}>{title}</Text>
@@ -79,7 +90,7 @@ const HelpCenterScreen = ({ navigation }: NavigationProps<'HelpCenter'>) => {
                 </Text>
             </View>
             <View style={styles.contactArrow}>
-                <Text style={styles.arrowText}>→</Text>
+                <Ionicons name="chevron-forward" size={18} color={COLORS.grey} />
             </View>
         </TouchableOpacity>
     );
@@ -98,7 +109,7 @@ const HelpCenterScreen = ({ navigation }: NavigationProps<'HelpCenter'>) => {
             {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Text style={styles.backButton}>←</Text>
+                    <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Centro de Ayuda</Text>
                 <View style={styles.headerPlaceholder} />
@@ -108,10 +119,10 @@ const HelpCenterScreen = ({ navigation }: NavigationProps<'HelpCenter'>) => {
                 {/* Welcome Section */}
                 <View style={styles.welcomeSection}>
                     <View style={styles.welcomeIconContainer}>
-                        <Image
-                            source={require('../../assets/help-icon.png')}
-                            style={styles.welcomeIcon}
-                            resizeMode="contain"
+                        <Ionicons
+                            name="help-circle"
+                            size={40}
+                            color={COLORS.white}
                         />
                     </View>
                     <Text style={styles.welcomeTitle}>¿Necesitas Ayuda?</Text>
@@ -125,25 +136,25 @@ const HelpCenterScreen = ({ navigation }: NavigationProps<'HelpCenter'>) => {
                     <Text style={styles.sectionTitle}>Información de Contacto</Text>
 
                     <ContactCard
-                        icon={require('../../assets/user-icon.png')}
+                        iconName="headset"
                         title="Soporte General"
                         subtitle="Lunes a Viernes, 9:00 AM - 6:00 PM"
-                        contact="+213 555 123 456"
+                        contact="+970 555 123 456"
                         onPress={() => handleCall('+213555123456')}
                         type="phone"
                     />
 
                     <ContactCard
-                        icon={require('../../assets/help-icon.png')}
+                        iconName="build"
                         title="Soporte Técnico"
                         subtitle="Disponible 24/7"
-                        contact="+213 555 789 012"
+                        contact="+970 555 789 012"
                         onPress={() => handleCall('+213555789012')}
                         type="phone"
                     />
 
                     <ContactCard
-                        icon={require('../../assets/invite-icon.png')}
+                        iconName="mail"
                         title="Consultas por Email"
                         subtitle="Respuesta en 24 horas"
                         contact="soporte@sanadapp.com"
@@ -152,7 +163,7 @@ const HelpCenterScreen = ({ navigation }: NavigationProps<'HelpCenter'>) => {
                     />
 
                     <ContactCard
-                        icon={require('../../assets/bird-logo.png')}
+                        iconName="people"
                         title="Colaboraciones"
                         subtitle="Para organizaciones benéficas"
                         contact="colaboraciones@sanadapp.com"

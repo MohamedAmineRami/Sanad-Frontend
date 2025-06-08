@@ -19,7 +19,7 @@ export const HomeIcon = ({ size = 24, color = '#0C766A', focused = false }) => {
 };
 
 // Notifications Icon Component
-export const NotificationsIcon = ({ size = 24, color = '#0C766A', focused = false }) => {
+export const CampaignsIcon = ({ size = 24, color = '#0C766A', focused = false }) => {
     return (
         <View style={{ width: size, height: size, justifyContent: 'center', alignItems: 'center' }}>
             <Image

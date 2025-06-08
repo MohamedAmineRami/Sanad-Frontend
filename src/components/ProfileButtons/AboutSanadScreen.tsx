@@ -10,6 +10,7 @@ import {
     ScrollView,
     Linking,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { COLORS, FONTS, SIZES, SHADOWS } from '../../utils/constants';
 import { NavigationProps } from '../../types/navigation-types';
 
@@ -28,22 +29,22 @@ const AboutSanadScreen = ({ navigation }: NavigationProps<'AboutSanad'>) => {
     };
 
     const FeatureCard = ({
-                             icon,
+                             iconName,
                              title,
                              description,
                              backgroundColor = COLORS.primary
                          }: {
-        icon: any;
+        iconName: string;
         title: string;
         description: string;
         backgroundColor?: string;
     }) => (
         <View style={styles.featureCard}>
             <View style={[styles.featureIconContainer, { backgroundColor }]}>
-                <Image
-                    source={icon}
-                    style={styles.featureIcon}
-                    resizeMode="contain"
+                <Ionicons
+                    name={iconName as any}
+                    size={30}
+                    color={COLORS.white}
                 />
             </View>
             <View style={styles.featureTextContainer}>
@@ -61,11 +62,11 @@ const AboutSanadScreen = ({ navigation }: NavigationProps<'AboutSanad'>) => {
     );
 
     const SocialButton = ({
-                              icon,
+                              iconName,
                               platform,
                               color
                           }: {
-        icon: any;
+        iconName: string;
         platform: string;
         color: string;
     }) => (
@@ -73,10 +74,10 @@ const AboutSanadScreen = ({ navigation }: NavigationProps<'AboutSanad'>) => {
             style={[styles.socialButton, { backgroundColor: color }]}
             onPress={() => handleSocialPress(platform)}
         >
-            <Image
-                source={icon}
-                style={styles.socialIcon}
-                resizeMode="contain"
+            <Ionicons
+                name={iconName as any}
+                size={24}
+                color={COLORS.white}
             />
         </TouchableOpacity>
     );
@@ -88,7 +89,7 @@ const AboutSanadScreen = ({ navigation }: NavigationProps<'AboutSanad'>) => {
             {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Text style={styles.backButton}>←</Text>
+                    <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Sobre Sanad</Text>
                 <View style={styles.headerPlaceholder} />
@@ -119,28 +120,28 @@ const AboutSanadScreen = ({ navigation }: NavigationProps<'AboutSanad'>) => {
                     <Text style={styles.sectionTitle}>¿Qué nos hace únicos?</Text>
 
                     <FeatureCard
-                        icon={require('../../assets/user-icon.png')}
+                        iconName="eye"
                         title="Transparencia Total"
                         description="Seguimiento en tiempo real de cómo se utilizan tus donaciones con actualizaciones regulares."
                         backgroundColor="#4CAF50"
                     />
 
                     <FeatureCard
-                        icon={require('../../assets/help-icon.png')}
+                        iconName="shield-checkmark"
                         title="Seguridad Garantizada"
                         description="Transacciones protegidas con la más alta tecnología de encriptación y verificación."
                         backgroundColor="#2196F3"
                     />
 
                     <FeatureCard
-                        icon={require('../../assets/invite-icon.png')}
+                        iconName="people-circle"
                         title="Comunidad Unida"
                         description="Conecta con otros donantes y organizaciones para maximizar el impacto social."
                         backgroundColor="#FF9800"
                     />
 
                     <FeatureCard
-                        icon={require('../../assets/bird-logo.png')}
+                        iconName="phone-portrait"
                         title="Facilidad de Uso"
                         description="Interfaz intuitiva que hace que donar sea muy simple en unos sencillos pasos."
                         backgroundColor="#9C27B0"
@@ -166,10 +167,10 @@ const AboutSanadScreen = ({ navigation }: NavigationProps<'AboutSanad'>) => {
 
                     <TouchableOpacity style={styles.websiteButton} onPress={handleWebsitePress}>
                         <View style={styles.websiteIconContainer}>
-                            <Image
-                                source={require('../../assets/bird-logo.png')}
-                                style={styles.websiteIcon}
-                                resizeMode="contain"
+                            <Ionicons
+                                name="globe"
+                                size={24}
+                                color={COLORS.white}
                             />
                         </View>
                         <View style={styles.websiteTextContainer}>
@@ -177,15 +178,37 @@ const AboutSanadScreen = ({ navigation }: NavigationProps<'AboutSanad'>) => {
                             <Text style={styles.websiteUrl}>www.sanadapp.com</Text>
                         </View>
                         <View style={styles.websiteArrow}>
-                            <Text style={styles.arrowText}>→</Text>
+                            <Ionicons name="chevron-forward" size={18} color={COLORS.grey} />
                         </View>
                     </TouchableOpacity>
+
+                    {/* Social Media Buttons */}
+                    <View style={styles.socialSection}>
+                        <Text style={styles.socialTitle}>Síguenos en redes sociales</Text>
+                        <View style={styles.socialButtonsContainer}>
+                            <SocialButton
+                                iconName="logo-facebook"
+                                platform="facebook"
+                                color="#1877F2"
+                            />
+                            <SocialButton
+                                iconName="logo-twitter"
+                                platform="twitter"
+                                color="#1DA1F2"
+                            />
+                            <SocialButton
+                                iconName="logo-instagram"
+                                platform="instagram"
+                                color="#E4405F"
+                            />
+                        </View>
+                    </View>
                 </View>
 
                 {/* Version Info */}
                 <View style={styles.versionSection}>
                     <Text style={styles.versionText}>Versión 1.0.0</Text>
-                    <Text style={styles.copyrightText}>© 2024 SanadApp. Todos los derechos reservados.</Text>
+                    <Text style={styles.copyrightText}>© 2025 SanadApp. Todos los derechos reservados.</Text>
                 </View>
             </ScrollView>
         </SafeAreaView>

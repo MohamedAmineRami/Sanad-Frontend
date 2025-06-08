@@ -11,7 +11,6 @@ export default function App() {
     const fontsLoaded = useFonts();
 
     useEffect(() => {
-        // Simulate a loading process
         const timer = setTimeout(() => {
             setIsLoading(false);
         }, 3000); // 3 seconds

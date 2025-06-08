@@ -11,7 +11,6 @@ interface HomeHeaderProps {
 const HomeHeader: React.FC<HomeHeaderProps> = ({
                                                    userName,
                                                    onViewProfile,
-                                                   onViewNotifications
                                                }) => {
     return (
         <View style={styles.container}>

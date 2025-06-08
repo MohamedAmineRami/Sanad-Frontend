@@ -3,18 +3,17 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, FONTS, SIZES, SHADOWS } from '../../utils/constants';
 
-// Updated Campaign interface that matches your campaignsData structure
 export interface Campaign {
     id: string;
     title: string;
-    image: any; // require() for local images
+    image: any;
     participants: number;
-    progress: number; // percentage (0-100)
+    progress: number;
     category: 'food' | 'water' | 'education' | 'other';
-    goal: number; // Required: total goal amount
-    raised: number; // Required: amount raised so far
-    description: string; // Required: campaign description
-    organizationName: string; // Required: name of the organization
+    goal: number;
+    raised: number;
+    description: string;
+    organizationName: string;
 }
 
 interface CampaignCardProps {
@@ -23,7 +22,6 @@ interface CampaignCardProps {
 }
 
 const CampaignsCard = ({ campaign, onPress }: CampaignCardProps) => {
-    // Get progress bar color based on campaign category
     const getProgressColor = (category: string) => {
         switch (category) {
             case 'food':
@@ -47,7 +45,7 @@ const CampaignsCard = ({ campaign, onPress }: CampaignCardProps) => {
             case 'education':
                 return '#FFF2E6';
             default:
-                return '#d5edee'; // Light default color
+                return '#d5edee';
         }
     };
 

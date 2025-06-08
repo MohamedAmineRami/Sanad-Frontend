@@ -140,16 +140,16 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         ...SHADOWS.light,
         overflow: 'hidden',
-        minHeight: 120, // Increased height for a better UI
+        minHeight: 120,
     },
     touchableContent: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: SIZES.large, // Increased padding
-        minHeight: 120, // Increased minimum height
+        padding: SIZES.large,
+        minHeight: 120,
     },
     iconContainer: {
-        width: 40, // Increased icon container size
+        width: 40,
         height: 40,
         borderRadius: 30,
         backgroundColor: COLORS.background,
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
         marginRight: SIZES.medium,
     },
     actionIcon: {
-        width: 50, // Increased icon size
+        width: 50,
         height: 30,
     },
     textContainer: {
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     actionTitle: {
-        fontSize: SIZES.font + 2, // Slightly larger font
+        fontSize: SIZES.font ,
         fontFamily: FONTS.medium,
         color: COLORS.black,
         marginBottom: 4,

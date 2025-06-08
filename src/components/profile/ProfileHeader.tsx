@@ -9,7 +9,7 @@ import { COLORS, FONTS, SIZES, SHADOWS } from '../../utils/constants';
 
 interface ProfileHeaderProps {
     name: string;
-    avatar?: any; // Optional custom avatar image
+    avatar?: any;
 }
 
 const ProfileHeader = ({ name, avatar }: ProfileHeaderProps) => {
@@ -43,7 +43,6 @@ const ProfileHeader = ({ name, avatar }: ProfileHeaderProps) => {
                     </View>
                 </View>
 
-                {/* Name Container */}
                 <View style={styles.nameContainer}>
                     <Text style={styles.profileName}>{name}</Text>
                 </View>

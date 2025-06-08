@@ -90,7 +90,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     };
 
-    // Check authentication state on app start
     const checkAuthState = async () => {
         try {
             dispatch({ type: 'SET_LOADING', payload: true });
@@ -104,11 +103,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             if (token && refreshToken && userData) {
                 const user = JSON.parse(userData);
 
-                // Set token in API service
                 ApiService.setToken(token);
 
-                // TODO: Verify token is still valid
-                // For now, we'll assume it's valid if it exists
                 dispatch({
                     type: 'LOGIN_SUCCESS',
                     payload: { user, token, refreshToken },
@@ -183,23 +179,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 try {
                     await ApiService.logout();
                 } catch (apiError) {
-                    // Log the API error but don't throw it - we still want to logout locally
                     console.error('Logout API call failed:', apiError);
-                    // Continue with local logout even if API call fails
                 }
             }
         } catch (error) {
             console.error('Unexpected logout error:', error);
             // Continue with local logout even if there's an unexpected error
         } finally {
-            // Always clear local data regardless of API call success/failure
             await clearAuthData();
             ApiService.setToken(null);
             dispatch({ type: 'LOGOUT' });
         }
     };
 
-    // Check auth state on mount
     useEffect(() => {
         checkAuthState();
     }, []);

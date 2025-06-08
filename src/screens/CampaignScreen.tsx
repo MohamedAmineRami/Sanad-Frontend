@@ -8,7 +8,6 @@ import {
     ScrollView,
     Image,
     TouchableOpacity,
-    Dimensions,
     ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,7 +16,6 @@ import { NavigationProps } from '../types/navigation-types';
 import { Campaign, BackendCampaign, transformCampaign } from '../types/campaign';
 import ApiService from '../services/api';
 
-const { width } = Dimensions.get('window');
 
 interface CampaignScreenProps extends NavigationProps<'CampaignDetails'> {}
 
@@ -36,7 +34,6 @@ const CampaignScreen = ({ navigation, route }: CampaignScreenProps) => {
             setLoading(true);
             setError(null);
 
-            // Convert string id to number for API call
             const numericId = parseInt(id.toString(), 10);
             const backendCampaign: BackendCampaign = await ApiService.getCampaignById(numericId);
             const transformedCampaign = transformCampaign(backendCampaign);
@@ -50,7 +47,6 @@ const CampaignScreen = ({ navigation, route }: CampaignScreenProps) => {
         }
     };
 
-    // Get progress bar color based on campaign category
     const getProgressColor = (category: string) => {
         switch (category) {
             case 'food':

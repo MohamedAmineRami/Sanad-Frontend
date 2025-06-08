@@ -12,7 +12,7 @@ import CampaignScreen from '../screens/CampaignScreen';
 import DonateScreen from '../screens/DonateScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import TabBar from '../components/TabBar';
-import { RootStackParamList } from '../types/navigation-types';
+import {RootStackParamList, TabParamList} from '../types/navigation-types';
 import { useAuth } from '../context/AuthContext';
 import { COLORS } from '../utils/constants';
 
@@ -21,7 +21,8 @@ import HelpCenterScreen from '../components/ProfileButtons/HelpCenterScreen';
 import InviteFriendsScreen from '../components/ProfileButtons/InviteFriendsScreen';
 import AboutSanadScreen from '../components/ProfileButtons/AboutSanadScreen';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<TabParamList>();
+
 const Stack = createStackNavigator<RootStackParamList>();
 
 function BottomTabNavigator() {
@@ -33,7 +34,7 @@ function BottomTabNavigator() {
             }}
         >
             <Tab.Screen name="Home" component={HomeScreen} />
-            <Tab.Screen name="Notifications" component={CampaignsScreen} />
+            <Tab.Screen name="Campaigns" component={CampaignsScreen} />
             <Tab.Screen name="Profile" component={ProfileScreen} />
         </Tab.Navigator>
     );

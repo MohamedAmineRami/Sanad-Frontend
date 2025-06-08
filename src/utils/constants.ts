@@ -19,7 +19,6 @@ export const COLORS = {
     introduzcaText: '#5D4037',
 };
 
-// FONTS, SIZES, SHADOWS remain the same as you provided.
 export const FONTS = {
     regular: 'Poppins_400Regular',
     medium: 'Poppins_500Medium',

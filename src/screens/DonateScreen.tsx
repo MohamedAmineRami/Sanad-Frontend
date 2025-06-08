@@ -14,7 +14,6 @@ import { Campaign, BackendCampaign, transformCampaign } from '../types/campaign'
 import { DonationRequest} from '../types/donation';
 import ApiService from '../services/api';
 
-// Import modular components
 import { DonateHeader } from '../components/donate/DonateHeader';
 import { AmountDisplay } from '../components/donate/AmountDisplay';
 import { QuickAmountButtons } from '../components/donate/QuickAmountButtons';
@@ -51,7 +50,6 @@ const DonateScreen = ({ navigation, route }: DonateScreenProps) => {
             setLoading(true);
             setError(null);
 
-            // Convert string id to number for API call
             const numericId = parseInt(campaignId.toString(), 10);
             const backendCampaign: BackendCampaign = await ApiService.getCampaignById(numericId);
             const transformedCampaign = transformCampaign(backendCampaign);
@@ -65,7 +63,6 @@ const DonateScreen = ({ navigation, route }: DonateScreenProps) => {
         }
     };
 
-    // Get background color based on campaign category
     const getBackgroundColor = (category: string) => {
         switch (category) {
             case 'food':
@@ -80,14 +77,12 @@ const DonateScreen = ({ navigation, route }: DonateScreenProps) => {
         }
     };
 
-    // Get the background color for the current campaign
     const backgroundColor = campaign ? getBackgroundColor(campaign.category) : COLORS.brownRose;
 
     useEffect(() => {
         setDonationAmount(DEFAULT_AMOUNT);
     }, []);
 
-    // Event handlers
     const handleBackPress = () => {
         navigation.goBack();
     };

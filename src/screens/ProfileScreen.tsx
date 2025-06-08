@@ -9,12 +9,11 @@ import { COLORS } from '../utils/constants';
 import { TabNavigationProps } from '../types/navigation-types';
 import ProfileHeader from '../components/profile/ProfileHeader';
 import ProfileActionsGrid from '../components/profile/ProfileActionsGrid';
-import { useAuth } from '../context/AuthContext'; // Import useAuth hook
+import { useAuth } from '../context/AuthContext';
 
 const ProfileScreen = ({ navigation }: TabNavigationProps<'Profile'>) => {
     const { user } = useAuth(); // Get the authenticated user
 
-    // Define profile actions data with navigation
     const profileActions = [
         {
             id: 'account',
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
         paddingTop: StatusBar.currentHeight || 0,
     },
     tabPlaceholder: {
-        height: 80, // Space for the bottom tab bar
+        height: 80,
     },
 });
 

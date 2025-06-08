@@ -19,13 +19,11 @@ interface ProfileActionsGridProps {
 }
 
 const ProfileActionsGrid = ({ actions }: ProfileActionsGridProps) => {
-    // Split actions into rows (first 2 for top row, next 2 for bottom row)
     const topRowActions = actions.slice(0, 2);
     const bottomRowActions = actions.slice(2, 4);
 
     return (
         <View style={styles.actionsContainer}>
-            {/* Top Row */}
             <View style={styles.row}>
                 {topRowActions.map((action) => (
                     <ProfileActionButton
@@ -38,7 +36,6 @@ const ProfileActionsGrid = ({ actions }: ProfileActionsGridProps) => {
                 ))}
             </View>
 
-            {/* Bottom Row */}
             {bottomRowActions.length > 0 && (
                 <View style={styles.row}>
                     {bottomRowActions.map((action) => (

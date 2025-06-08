@@ -7,7 +7,7 @@ import { BackendCampaign } from '../types/campaign';
 import { DonationRequest, DonationResponse } from '../types/donation';
 import { Activity } from '../types/activity';
 
-const BASE_URL = 'http://192.168.1.129:8080/api'; // Adjust this to your backend URL
+const BASE_URL = 'http://192.168.1.129:8080/api'; // My IP
 
 class ApiService {
     private static instance: ApiService;

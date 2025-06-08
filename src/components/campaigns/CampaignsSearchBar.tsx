@@ -2,7 +2,6 @@ import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import { COLORS, FONTS, SIZES, SHADOWS } from '../../utils/constants';
 
-// Search Icon Component
 const SearchIcon = () => (
     <View style={styles.searchIconContainer}>
         <View style={styles.searchIcon}>
