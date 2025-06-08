@@ -32,7 +32,7 @@ const LoginScreen = ({ navigation }: NavigationProps<'Login'>) => {
 
     const handleEmailLogin = async () => {
         if (!formData.email.trim() || !formData.password.trim()) {
-            Alert.alert('Error', 'Please fill in all fields');
+            Alert.alert('Error', 'Por favor completa todos los campos');
             return;
         }
 
@@ -43,7 +43,7 @@ const LoginScreen = ({ navigation }: NavigationProps<'Login'>) => {
                 password: formData.password,
             });
         } catch (error: any) {
-            Alert.alert('Login Failed', error.message || 'Please try again');
+            Alert.alert('Inicio de Sesión Fallido', error.message || 'Por favor intenta de nuevo');
         } finally {
             setIsEmailLoading(false);
         }
@@ -67,7 +67,7 @@ const LoginScreen = ({ navigation }: NavigationProps<'Login'>) => {
                         >
                             <Text style={styles.backButtonText}>←</Text>
                         </TouchableOpacity>
-                        <Text style={styles.headerTitle}>Sign In</Text>
+                        <Text style={styles.headerTitle}>Iniciar Sesión</Text>
                     </View>
 
                     {/* Logo */}
@@ -77,8 +77,8 @@ const LoginScreen = ({ navigation }: NavigationProps<'Login'>) => {
                             style={styles.logo}
                             resizeMode="contain"
                         />
-                        <Text style={styles.mainTextWithBg}>Welcome Back</Text>
-                        <Text style={styles.subTextWithBg}>Sign in to continue</Text>
+                        <Text style={styles.mainTextWithBg}>¡Bienvenido de Nuevo!</Text>
+                        <Text style={styles.subTextWithBg}>Inicia sesión para continuar</Text>
                     </View>
 
                     {/* Email Login Form */}
@@ -86,7 +86,7 @@ const LoginScreen = ({ navigation }: NavigationProps<'Login'>) => {
                         <View style={styles.inputContainer}>
                             <TextInput
                                 style={styles.input}
-                                placeholder="Email Address"
+                                placeholder="Correo Electrónico"
                                 placeholderTextColor={COLORS.grey}
                                 value={formData.email}
                                 onChangeText={(text) => handleInputChange('email', text)}
@@ -98,7 +98,7 @@ const LoginScreen = ({ navigation }: NavigationProps<'Login'>) => {
                         <View style={styles.inputContainer}>
                             <TextInput
                                 style={styles.input}
-                                placeholder="Password"
+                                placeholder="Contraseña"
                                 placeholderTextColor={COLORS.grey}
                                 value={formData.password}
                                 onChangeText={(text) => handleInputChange('password', text)}
@@ -116,15 +116,15 @@ const LoginScreen = ({ navigation }: NavigationProps<'Login'>) => {
                             {isEmailLoading ? (
                                 <ActivityIndicator size="small" color={COLORS.white} />
                             ) : (
-                                <Text style={styles.emailLoginButtonText}>Sign In</Text>
+                                <Text style={styles.emailLoginButtonText}>Iniciar Sesión</Text>
                             )}
                         </TouchableOpacity>
 
                         {/* Register Link */}
                         <View style={styles.registerLinkContainer}>
-                            <Text style={styles.registerLinkTextWithBg}>Don't have an account? </Text>
+                            <Text style={styles.registerLinkTextWithBg}>¿No tienes una cuenta? </Text>
                             <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-                                <Text style={styles.registerLink}>Sign Up</Text>
+                                <Text style={styles.registerLink}>Registrarse</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -162,14 +162,14 @@ const LoginScreen = ({ navigation }: NavigationProps<'Login'>) => {
                         onPress={() => setShowEmailLogin(true)}
                         activeOpacity={0.8}
                     >
-                        <Text style={styles.emailButtonText}>Sign in with Email</Text>
+                        <Text style={styles.emailButtonText}>Iniciar sesión con Correo</Text>
                     </TouchableOpacity>
 
                     {/* Register Link */}
                     <View style={styles.registerLinkContainer}>
-                        <Text style={styles.registerLinkTextWithBg}>New to Sanad? </Text>
+                        <Text style={styles.registerLinkTextWithBg}>¿Nuevo en Sanad? </Text>
                         <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-                            <Text style={styles.registerLink}>Create Account</Text>
+                            <Text style={styles.registerLink}>Crear Cuenta</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

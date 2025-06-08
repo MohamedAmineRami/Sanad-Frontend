@@ -11,7 +11,8 @@ import {
 import { COLORS, FONTS, SIZES } from '../utils/constants';
 import { NavigationProps } from '../types/navigation-types';
 import { Campaign, BackendCampaign, transformCampaign } from '../types/campaign';
-import ApiService, { DonationRequest } from '../services/api';
+import { DonationRequest} from '../types/donation';
+import ApiService from '../services/api';
 
 // Import modular components
 import { DonateHeader } from '../components/donate/DonateHeader';

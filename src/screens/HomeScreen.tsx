@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { SafeAreaView, View, ScrollView, StyleSheet, StatusBar } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { COLORS, SIZES } from '../utils/constants';
 import HomeHeader from '../components/home/HomeHeader';
 import ActivitySection from '../components/home/ActivitySection';
@@ -7,24 +8,9 @@ import CategoriesSection from '../components/home/CategoriesSection';
 import CampaignCardHome from '../components/home/CampaignCardHome';
 import { TabNavigationProps } from '../types/navigation-types';
 import { Campaign, BackendCampaign, transformCampaign } from '../types/campaign';
+import { ActivityItem, transformActivity } from '../types/activity';
 import ApiService from '../services/api';
-import { useAuth } from '../context/AuthContext'; // Import useAuth hook
-
-// Dummy data (can be moved or replaced later as well)
-const recentActivities = [
-    {
-        id: '1',
-        type: 'donation',
-        message: 'Raquel donó a "Ayuda en Palestina"',
-        icon: 'user',
-    },
-    {
-        id: '2',
-        type: 'campaign',
-        message: 'Nueva campaña: "Alimentar a los niños palest..."',
-        icon: 'group',
-    },
-];
+import { useAuth } from '../context/AuthContext';
 
 const categories = [
     {
@@ -54,16 +40,26 @@ const categories = [
 ];
 
 const HomeScreen = ({ navigation }: TabNavigationProps<'Home'>) => {
-    const { user } = useAuth(); // Get the authenticated user
+    const { user } = useAuth();
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
     const [featuredCampaign, setFeaturedCampaign] = useState<Campaign | null>(null);
+    const [activities, setActivities] = useState<ActivityItem[]>([]);
     const [loading, setLoading] = useState(false);
 
-    // Load all campaigns on component mount (for featured campaign)
+    // Load all campaigns and activities on component mount
     useEffect(() => {
         loadAllCampaigns();
+        loadRecentActivities();
     }, []);
+
+    // Refresh activities every time the screen comes into focus
+    useFocusEffect(
+        useCallback(() => {
+            console.log('🔄 Home screen focused - refreshing activities');
+            loadRecentActivities();
+        }, [])
+    );
 
     // Load campaigns when category changes
     useEffect(() => {
@@ -109,6 +105,18 @@ const HomeScreen = ({ navigation }: TabNavigationProps<'Home'>) => {
         }
     };
 
+    const loadRecentActivities = async () => {
+        try {
+            const recentActivities = await ApiService.getRecentActivities(3);
+            const transformedActivities = recentActivities.map(transformActivity);
+            console.log(' Final transformed activities:', transformedActivities);
+            setActivities(transformedActivities);
+        } catch (error) {
+            console.error(' Error loading activities:', error);
+            setActivities([]);
+        }
+    };
+
     const handleCategorySelect = (category: any) => {
         // Toggle category selection
         if (selectedCategory === category.id) {
@@ -131,15 +139,15 @@ const HomeScreen = ({ navigation }: TabNavigationProps<'Home'>) => {
             <ScrollView showsVerticalScrollIndicator={false}>
                 <HomeHeader userName={user?.name || 'Usuario'} />
 
-                <ActivitySection activities={recentActivities} />
+                <ActivitySection activities={activities} />
 
                 <CategoriesSection
                     categories={categories}
                     selectedCategory={selectedCategory}
                     onSelectCategory={handleCategorySelect}
                     onCampaignPress={handleCampaignPress}
-                    campaigns={campaigns} // Pass the fetched campaigns
-                    loading={loading} // Pass loading state
+                    campaigns={campaigns}
+                    loading={loading}
                 />
 
                 {/* Show a featured campaign only when no category is selected */}
@@ -155,8 +163,6 @@ const HomeScreen = ({ navigation }: TabNavigationProps<'Home'>) => {
 
                 <View style={{ height: 20 }} />
             </ScrollView>
-
-            {/* Bottom Navigation Bar - This will be added via React Navigation */}
         </SafeAreaView>
     );
 };
@@ -165,7 +171,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.background,
-        paddingTop: StatusBar.currentHeight || 0, // Use StatusBar.currentHeight for Android
+        paddingTop: StatusBar.currentHeight || 0,
     },
 });
 

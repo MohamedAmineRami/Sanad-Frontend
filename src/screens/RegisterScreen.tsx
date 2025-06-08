@@ -1,5 +1,3 @@
-// src/screens/RegisterScreen.tsx
-
 import React, { useState } from 'react';
 import {
     View,
@@ -34,23 +32,23 @@ const RegisterScreen = ({ navigation }: NavigationProps<'Register'>) => {
 
     const validateForm = () => {
         if (!formData.name.trim()) {
-            Alert.alert('Error', 'Please enter your name');
+            Alert.alert('Error', 'Por favor ingresa tu nombre');
             return false;
         }
         if (!formData.email.trim()) {
-            Alert.alert('Error', 'Please enter your email');
+            Alert.alert('Error', 'Por favor ingresa tu correo electrónico');
             return false;
         }
         if (!formData.email.includes('@')) {
-            Alert.alert('Error', 'Please enter a valid email');
+            Alert.alert('Error', 'Por favor ingresa un correo válido');
             return false;
         }
         if (formData.password.length < 6) {
-            Alert.alert('Error', 'Password must be at least 6 characters');
+            Alert.alert('Error', 'La contraseña debe tener al menos 6 caracteres');
             return false;
         }
         if (formData.password !== formData.confirmPassword) {
-            Alert.alert('Error', 'Passwords do not match');
+            Alert.alert('Error', 'Las contraseñas no coinciden');
             return false;
         }
         return true;
@@ -67,7 +65,7 @@ const RegisterScreen = ({ navigation }: NavigationProps<'Register'>) => {
                 password: formData.password,
             });
         } catch (error: any) {
-            Alert.alert('Registration Failed', error.message || 'Please try again');
+            Alert.alert('Registro Fallido', error.message || 'Por favor intenta de nuevo');
         } finally {
             setIsLoading(false);
         }
@@ -85,7 +83,7 @@ const RegisterScreen = ({ navigation }: NavigationProps<'Register'>) => {
                 >
                     <Text style={styles.backButtonText}>←</Text>
                 </TouchableOpacity>
-                <Text style={styles.headerTitle}>Create Account</Text>
+                <Text style={styles.headerTitle}>Crear Cuenta</Text>
             </View>
 
             {/* Logo */}
@@ -95,8 +93,8 @@ const RegisterScreen = ({ navigation }: NavigationProps<'Register'>) => {
                     style={styles.logo}
                     resizeMode="contain"
                 />
-                <Text style={styles.mainText}>Join Sanad</Text>
-                <Text style={styles.subText}>Start making a difference today</Text>
+                <Text style={styles.mainText}>Únete a Sanad</Text>
+                <Text style={styles.subText}>Comienza a hacer la diferencia hoy</Text>
             </View>
 
             {/* Form */}
@@ -104,7 +102,7 @@ const RegisterScreen = ({ navigation }: NavigationProps<'Register'>) => {
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
-                        placeholder="Full Name"
+                        placeholder="Nombre Completo"
                         placeholderTextColor={COLORS.grey}
                         value={formData.name}
                         onChangeText={(text) => handleInputChange('name', text)}
@@ -115,7 +113,7 @@ const RegisterScreen = ({ navigation }: NavigationProps<'Register'>) => {
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
-                        placeholder="Email Address"
+                        placeholder="Correo Electrónico"
                         placeholderTextColor={COLORS.grey}
                         value={formData.email}
                         onChangeText={(text) => handleInputChange('email', text)}
@@ -127,7 +125,7 @@ const RegisterScreen = ({ navigation }: NavigationProps<'Register'>) => {
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
-                        placeholder="Password"
+                        placeholder="Contraseña"
                         placeholderTextColor={COLORS.grey}
                         value={formData.password}
                         onChangeText={(text) => handleInputChange('password', text)}
@@ -138,7 +136,7 @@ const RegisterScreen = ({ navigation }: NavigationProps<'Register'>) => {
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
-                        placeholder="Confirm Password"
+                        placeholder="Confirmar Contraseña"
                         placeholderTextColor={COLORS.grey}
                         value={formData.confirmPassword}
                         onChangeText={(text) => handleInputChange('confirmPassword', text)}
@@ -156,15 +154,15 @@ const RegisterScreen = ({ navigation }: NavigationProps<'Register'>) => {
                     {isLoading ? (
                         <ActivityIndicator size="small" color={COLORS.white} />
                     ) : (
-                        <Text style={styles.registerButtonText}>Create Account</Text>
+                        <Text style={styles.registerButtonText}>Crear Cuenta</Text>
                     )}
                 </TouchableOpacity>
 
                 {/* Login Link */}
                 <View style={styles.loginLinkContainer}>
-                    <Text style={styles.loginLinkText}>Already have an account? </Text>
+                    <Text style={styles.loginLinkText}>¿Ya tienes una cuenta? </Text>
                     <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                        <Text style={styles.loginLink}>Sign In</Text>
+                        <Text style={styles.loginLink}>Iniciar Sesión</Text>
                     </TouchableOpacity>
                 </View>
             </View>
