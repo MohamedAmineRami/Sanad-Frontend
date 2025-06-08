@@ -11,7 +11,7 @@ import {
 import { COLORS, FONTS, SIZES } from '../utils/constants';
 import { NavigationProps } from '../types/navigation-types';
 import { Campaign, BackendCampaign, transformCampaign } from '../types/campaign';
-import ApiService from '../services/api';
+import ApiService, { DonationRequest } from '../services/api';
 
 // Import modular components
 import { DonateHeader } from '../components/donate/DonateHeader';
@@ -32,6 +32,7 @@ const DonateScreen = ({ navigation, route }: DonateScreenProps) => {
     const [donationAmount, setDonationAmount] = useState(250);
     const [customAmount, setCustomAmount] = useState('');
     const [isCustomInput, setIsCustomInput] = useState(false);
+    const [isDonating, setIsDonating] = useState(false);
 
     // Configuration constants
     const QUICK_AMOUNTS = [50, 100, 250, 500, 1000];
@@ -136,15 +137,20 @@ const DonateScreen = ({ navigation, route }: DonateScreenProps) => {
         setCustomAmount('');
     };
 
-    const handleDonate = () => {
+    const handleDonate = async () => {
         if (donationAmount < MIN_AMOUNT) {
             Alert.alert('Cantidad mínima', `La cantidad mínima de donación es €${MIN_AMOUNT}`);
             return;
         }
 
+        if (!campaign) {
+            Alert.alert('Error', 'No se encontró información de la campaña');
+            return;
+        }
+
         Alert.alert(
             'Confirmar Donación',
-            `¿Confirmas tu donación de €${donationAmount} para "${campaign?.title}"?`,
+            `¿Confirmas tu donación de €${donationAmount} para "${campaign.title}"?`,
             [
                 {
                     text: 'Cancelar',
@@ -152,22 +158,47 @@ const DonateScreen = ({ navigation, route }: DonateScreenProps) => {
                 },
                 {
                     text: 'Confirmar',
-                    onPress: () => {
-                        // Here you would integrate with the payment gateway
-                        Alert.alert(
-                            '¡Gracias!',
-                            'Tu donación ha sido procesada exitosamente.',
-                            [
-                                {
-                                    text: 'OK',
-                                    onPress: () => navigation.goBack(),
-                                },
-                            ]
-                        );
-                    },
+                    onPress: () => processDonation(),
                 },
             ]
         );
+    };
+
+    const processDonation = async () => {
+        if (!campaign) return;
+
+        try {
+            setIsDonating(true);
+
+            const donationData: DonationRequest = {
+                amount: donationAmount,
+                currency: 'EUR',
+                campaignId: parseInt(campaignId.toString(), 10),
+                paymentMethod: 'CARD', // You can make this dynamic based on user selection
+                anonymous: false, // You can add this as an option in the UI
+            };
+
+            const donation = await ApiService.createDonation(donationData);
+
+            Alert.alert(
+                '¡Gracias!',
+                `Tu donación de €${donationAmount} ha sido procesada exitosamente.\n\nID de donación: ${donation.id.substring(0, 8)}...`,
+                [
+                    {
+                        text: 'OK',
+                        onPress: () => navigation.goBack(),
+                    },
+                ]
+            );
+        } catch (error) {
+            console.error('Error creating donation:', error);
+            Alert.alert(
+                'Error',
+                'Hubo un problema procesando tu donación. Por favor, inténtalo de nuevo.'
+            );
+        } finally {
+            setIsDonating(false);
+        }
     };
 
     // Loading state
@@ -239,7 +270,11 @@ const DonateScreen = ({ navigation, route }: DonateScreenProps) => {
             </View>
 
             {/* Donate Button Component */}
-            <DonateButton onPress={handleDonate} />
+            <DonateButton
+                onPress={handleDonate}
+                loading={isDonating}
+                disabled={isDonating}
+            />
         </SafeAreaView>
     );
 };

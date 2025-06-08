@@ -4,8 +4,14 @@ import {
     RegisterRequest,
 } from '../types/auth-types';
 import { BackendCampaign } from '../types/campaign';
+import { DonationRequest,
+    DonationResponse
+} from '../types/donation';
 
 const BASE_URL = 'http://192.168.1.129:8080/api'; // Adjust this to your backend URL
+
+// Add donation types
+
 
 class ApiService {
     private static instance: ApiService;
@@ -107,6 +113,15 @@ class ApiService {
     async getCampaignsByCategory(category: string): Promise<BackendCampaign[]> {
         return this.request<BackendCampaign[]>(`/campaigns?category=${category}`);
     }
+
+    // Donation endpoints
+    async createDonation(donationData: DonationRequest): Promise<DonationResponse> {
+        return this.request<DonationResponse>('/donations', {
+            method: 'POST',
+            body: JSON.stringify(donationData),
+        });
+    }
+
 }
 
 export default ApiService.getInstance();

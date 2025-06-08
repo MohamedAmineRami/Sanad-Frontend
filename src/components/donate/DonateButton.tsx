@@ -5,6 +5,8 @@ import { COLORS, FONTS, SIZES } from '../../utils/constants';
 interface DonateButtonProps {
     onPress: () => void;
     text?: string;
+    loading?: any;
+    disabled?: any;
 }
 
 export const DonateButton = ({ onPress, text = "Enviar" }: DonateButtonProps) => {
